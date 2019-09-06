@@ -1,0 +1,160 @@
+{
+  "properties": {
+    "slug": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "hasAccess": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "environments":{
+      "type": [
+        "null",
+        "array"
+      ]
+    },
+    "teams": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "properties": {
+          "id": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "slug": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        },
+        "type": [
+          "null",
+          "object"
+        ]
+      }
+    },
+    "platform": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "firstEvent": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format":"date-time"
+    },
+    "latestRelease": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "versions": {
+           "type": [
+             "null",
+             "string"
+           ]
+        }
+      }
+    },
+    "isMember": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "team": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "id": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "slug": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
+    "platforms": {
+      "type": [
+        "null",
+        "array"
+      ]
+    },
+    "dateCreated": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format":"date-time"
+    },
+    "isBookmarked": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "id": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "latestDeploys": {
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "features": {
+      "type": [
+        "null",
+        "array"
+      ]
+    }
+  },
+  "type": [
+    "null",
+    "object"
+  ]
+}

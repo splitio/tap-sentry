@@ -1,0 +1,12 @@
+[
+  "tests/test_sentry.py::MyGreatClassTestCase::test_events",
+  "tests/test_sentry.py::MyGreatClassTestCase::test_issues",
+  "tests/test_sentry.py::MyGreatClassTestCase::test_projects",
+  "tests/test_sentry.py::MyGreatClassTestCase::test_sync_events",
+  "tests/test_sentry.py::MyGreatClassTestCase::test_sync_issues",
+  "tests/test_sentry.py::MyGreatClassTestCase::test_sync_projects",
+  "tests/test_sentry.py::MyGreatClassTestCase::test_sync_teams",
+  "tests/test_sentry.py::MyGreatClassTestCase::test_sync_users",
+  "tests/test_sentry.py::MyGreatClassTestCase::test_teams",
+  "tests/test_sentry.py::MyGreatClassTestCase::test_users"
+]
