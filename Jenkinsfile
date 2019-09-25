@@ -22,7 +22,7 @@ pipeline {
       SENTRY_STATE="./states/sentry.json"
 
       // Python Enviroments
-      VENV_S3="venv/tap-sentry"
+      VENV_SENTRY="venv/tap-sentry"
       VENV_SF="venv/target-snowflake"
 
     }
@@ -45,7 +45,7 @@ pipeline {
               steps {
                 sh './createVenv.sh "${VENV_SENTRY}" "${SOURCE_INSTALL}" "${FLAG}"'
               }
-            }// stage Venv S3
+            }// stage Venv Sentry
             stage('Venv Snowflake') {
               environment {
                 SOURCE_INSTALL='git+https://gitlab.com/meltano/target-snowflake.git@master#egg=target-snowflake'
@@ -59,7 +59,7 @@ pipeline {
               steps{
                 setState("${SENTRY_STATE}")
               }
-            }// stage State S3
+            }// stage State Sentry
           } // Parallel
         } // Stage Create Venv
 
