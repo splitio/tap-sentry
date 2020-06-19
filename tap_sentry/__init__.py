@@ -19,8 +19,7 @@ SCHEMA_PRIMARY_KEYS = {
     "projects": ["id"],
     "teams": ["id"],
     "users": ["id"]
-    # "events": ["id"], #will create table if it doesn't exist yet #comment out one that takes too long when i find it
-
+    # "events": ["id"], this has a lot of data, commenting it out for now.
 }
 
 
