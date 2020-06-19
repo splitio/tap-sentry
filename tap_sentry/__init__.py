@@ -13,38 +13,65 @@ REQUIRED_CONFIG_KEYS = ["start_date",
                         "api_token"]
 LOGGER = singer.get_logger()
 
+# map of schema name with their primary key
+SCHEMA_PRIMARY_KEYS = { 
+    "issues": ["id"],
+    "projects": ["id"],
+    "teams": ["id"],
+    "users": ["id"]
+    # "events": ["id"], #will create table if it doesn't exist yet #comment out one that takes too long when i find it
+
+}
+
+
 def get_abs_path(path):
     return os.path.join(os.path.dirname(os.path.realpath(__file__)), path)
 
-# Load schemas from schemas folder
-def load_schemas():
-    schemas = {}
 
-    for filename in os.listdir(get_abs_path('schemas')):
-        path = get_abs_path('schemas') + '/' + filename
-        file_raw = filename.replace('.json', '')
-        with open(path) as file:
-            schemas[file_raw] = json.load(file)
 
-    return schemas
+def load_schema(tap_stream_id):
+    path = "schemas/{}.json".format(tap_stream_id)
+    schema = utils.load_json(get_abs_path(path))
+    refs = schema.pop("definitions", {})
+    if refs:
+        singer.resolve_schema_references(schema, refs)
+    return schema
+
+
+def generate_metadata(schema_name, schema):
+    pk_fields = SCHEMA_PRIMARY_KEYS[schema_name]
+    mdata = metadata.new()
+    mdata = metadata.write(mdata, (), 'table-key-properties', pk_fields)
+
+    for field_name in schema['properties'].keys():
+        if field_name in pk_fields:
+            mdata = metadata.write(mdata, ('properties', field_name), 'inclusion', 'automatic')
+        else:
+            mdata = metadata.write(mdata, ('properties', field_name), 'inclusion', 'available')
+
+    return metadata.to_list(mdata)
+
+
+
+
+
 
 def discover():
-    raw_schemas = load_schemas()
     streams = []
 
-    for schema_name, schema in raw_schemas.items():
+    for schema_name in SCHEMA_PRIMARY_KEYS.keys():
 
-        # TODO: populate any metadata and stream's key properties here..
-        stream_metadata = []
-        stream_key_properties = []
+        schema = load_schema(schema_name) ##load the schema for each of them
+        stream_metadata = generate_metadata(schema_name, schema)
+        stream_key_properties = SCHEMA_PRIMARY_KEYS[schema_name]
 
         # create and add catalog entry
         catalog_entry = {
             'stream': schema_name,
             'tap_stream_id': schema_name,
             'schema': schema,
-            'metadata' : [],
-            'key_properties': []
+            'metadata' : stream_metadata,
+            'key_properties': stream_key_properties
         }
         streams.append(catalog_entry)
 
@@ -70,10 +97,14 @@ def create_sync_tasks(config, state, catalog):
     client = SentryClient(auth)
     sync = SentrySync(client, state)
 
-    selected_stream_ids = get_selected_streams(catalog)
-    sync_tasks = (sync.sync(stream.tap_stream_id, stream.schema)
-                  for stream in catalog.streams
-                  if stream.tap_stream_id in selected_stream_ids)
+    # selected_stream_ids = get_selected_streams(catalog)
+    # sync_tasks = (sync.sync(stream.tap_stream_id, stream.schema)
+    #               for stream in catalog.streams
+                #   if stream.tap_stream_id in selected_stream_ids)
+
+    sync_tasks = (sync.sync(stream['tap_stream_id'], stream['schema'])
+        for stream in catalog['streams'])
+    
 
     return asyncio.gather(*sync_tasks)
 

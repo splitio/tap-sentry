@@ -15,9 +15,9 @@ setup(
             "pendulum"
       ],
       entry_points="""
-    [console_scripts]
-    tap-sentry=tap_sentry:main
-    """,
+      [console_scripts]
+      tap-sentry=tap_sentry:main
+      """,
       packages=["tap_sentry"],
       package_data = {
             "schemas": ["tap_sentry/schemas/*.json"]
