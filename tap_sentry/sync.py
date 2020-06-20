@@ -15,7 +15,7 @@ import pendulum
 from singer.bookmarks import write_bookmark, get_bookmark
 from pendulum import datetime, period
 
-
+LOGGER = singer.get_logger()
 class SentryAuthentication(requests.auth.AuthBase):
     def __init__(self, api_token: str):
         self.api_token = api_token
@@ -90,6 +90,7 @@ class SentryClient:
             return events
         except:
             return None
+        
 
     def teams(self, state):
         try:
@@ -141,7 +142,7 @@ class SentrySync:
         stream = "issues"
         loop = asyncio.get_event_loop()
 
-        singer.write_schema(stream, schema.to_dict(), ["id"])
+        singer.write_schema(stream, schema, ["id"])
         extraction_time = singer.utils.now()
         if self.projects:
             for project in self.projects:
@@ -156,7 +157,7 @@ class SentrySync:
         """Issues per project."""
         stream = "projects"
         loop = asyncio.get_event_loop()
-        singer.write_schema('projects', schema.to_dict(), ["id"])
+        singer.write_schema('projects', schema, ["id"])
         if self.projects:
             for project in self.projects:
                 singer.write_record(stream, project)
@@ -167,7 +168,7 @@ class SentrySync:
         stream = "events"
         loop = asyncio.get_event_loop()
 
-        singer.write_schema(stream, schema.to_dict(), ["eventID"])
+        singer.write_schema(stream, schema, ["eventID"])  
         extraction_time = singer.utils.now()
         if self.projects:
             for project in self.projects:
@@ -181,7 +182,7 @@ class SentrySync:
         "Users in the organization."
         stream = "users"
         loop = asyncio.get_event_loop()
-        singer.write_schema(stream, schema.to_dict(), ["id"])
+        singer.write_schema(stream, schema, ["id"]) 
         users = await loop.run_in_executor(None, self.client.users, self.state)
         if users:
             for user in users:
@@ -193,7 +194,7 @@ class SentrySync:
         "Teams in the organization."
         stream = "teams"
         loop = asyncio.get_event_loop()
-        singer.write_schema(stream, schema.to_dict(), ["id"])
+        singer.write_schema(stream, schema, ["id"]) 
         teams = await loop.run_in_executor(None, self.client.teams, self.state)
         if teams:
             for team in teams:
